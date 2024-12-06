@@ -252,7 +252,7 @@ Donde $M_b$ es la masa del relleno ($kg$), $T_b$ es la temperatura media del rel
 \end{equation} 
 Donde $m_g$ es el flujo másico del gas $(\frac{kg}{s})$, $C_{p,g}$ es la capacidad calorífica del gas y $L$ es la longitud del regenerador $(m)$. 
 \subsubsection*{Parámetros del modelo}
-\textbf{Espacio vacío}
+\textbf{Porosidad}
 \newline
 El valor de $\epsilon$ es la razón del volumen disponible respecto a el volumen total del relleno:
 \begin{equation}
@@ -268,11 +268,11 @@ El diámetro puede definirse como el de una esfera.
 \end{equation}
 \textbf{Coeficiente global de transferencia de calor}
 \newline
-Para calcular este coeficiente se puede obtener de la siguiente manera segun Hausen\cite{Hausen1976}:
+Para calcular este coeficiente se puede obtener de la siguiente manera según Hausen\cite{Hausen1976}:
 \begin{equation}
 	h_t= \frac{1}{c} + \frac{1}{2(n+2)\lambda_b}\phi H + \frac{1}{h_r}
 \end{equation}
-El termino del coeficiente de fricción se obtuvo mediante el numero de Reynolds y usando la relacion de Hicks\cite{Hicks1970}.
+El termino del coeficiente de fricción se obtuvo mediante el numero de Reynolds y usando la relación de Hicks\cite{Hicks1970}.
 \newline
 La función $\phi H$ llamado factor de Hausen, intenta representar el efecto de la rapidez del cambio de temperatura dentro del empaquetado al inicio de un periodo de calentamiento o enfriamiento\cite{HINCHCLIFFE1981}.
 \begin{equation}
@@ -307,7 +307,7 @@ Para la condición de frontera en la entrada del lecho:
 \begin{equation}
 	T=T_{en}
 \end{equation}
-En la salida del regenerador, tanto para el solido como para el fluido, al no exitir mas lecho, el solido no puede intercambiar mas calor y ademas el fluido en la salida no intercambia calor con el fluido al frente:
+En la salida del regenerador, tanto para el solido como para el fluido, al no existir mas lecho, el solido no puede intercambiar mas calor y ademas el fluido en la salida no intercambia calor con el fluido al frente:
 \begin{equation}
 	\frac{\partial T}{\partial x} = 0, \qquad x=L
 \end{equation}
@@ -319,7 +319,7 @@ Para la fase del fluido que envuelve las partículas del fluido:
 \begin{equation}
 	\rho_a\epsilon_a C_{pa} \frac{\partial T}{\partial t} = \epsilon_a K_{a,x} \frac{\partial^2 T}{\partial^2 x^2} + ha_p(\theta - T) - \rho_a\epsilon_a C_{pa} u \frac{\partial T}{\partial x} + U a_w(T_0 - T )
 \end{equation}
-\subsubsection{Conclusión de la revisión del estado del arte}
+\subsection{Conclusión de la revisión del estado del arte}
 
 Se observo que las ecuaciones que indican el comportamiento del regenerador son similares a las empleadas en otros procesos de transferencia de calor y masa\cite{Kilkovsky2020}\cite{Kulkarni1992}\cite{SADRAMELI2016}, lo que permite un análisis comparativo y una comprensión más profunda de la dinámica del sistema.
 Los modelos que solo se basan en el balance de energía pueden proporcionar una aproximación útil, pero no capturan la complejidad del transporte de masa, lo que puede resultar en predicciones inexactas del comportamiento del regenerador. 
@@ -335,9 +335,9 @@ En la siguiente tabla se muestra los métodos usado para la solución y que tipo
 			Autor& Modelado & Método de solución\\ \hline
 			Kulkarni\cite{Kulkarni1992}& Energía y masa& Colocación ortogonal \\ 
 			Ramachandran et. al. \cite{Ramachadran1984} & Energía(adimensional) &Colocación ortogonal polinomial \\
-			Sadrameli & Energía & Analítico y Diferencias finitas \\
-			Kilkovsky & Balance de energía & Método abieto de Willmott   \\
-			López-Torres & Balance de energia & Diferencias finitas \\
+			Sadrameli \cite{SADRAMELI2016}& Energía & Analítico y Diferencias finitas \\
+			Kilkovsky \cite{Kilkovsky2020}& Balance de energía & Método abieto de Willmott   \\
+			López-Torres \cite{Lopez2013} & Balance de energia & Diferencias finitas \\
 			
 			\hline
 			
@@ -384,10 +384,11 @@ En este modelo se definieron dos ecuaciones, El primer termino de la ecuacion [3
 \begin{equation}\label{Gas}
 	M_b C_{p,b}\frac{\partial T_b}{\partial t} = h_t A (T_g - T_b) 
 \end{equation}
-Por otra parte, esta ecuacion indica como es el comportamiento de la temperatura del gas a lo largo del regenerador con la derivada parcial de $T_g$, capacidad calorífica del gas$C_{p,g}$ y el flujo másico. El segundo termino corresponde al producto de la capacidad calorífica, la masa del relleno y $\frac{\partial T_g}{\partial t}$ al cambio de la temperatura del gas ($T_g$) en el tiempo. 
+Por otra parte, esta ecuacion indica como es el comportamiento de la temperatura del gas a lo largo del regenerador con la derivada parcial de $T_g$, capacidad calorífica del gas $C_{p,g}$ y el flujo másico. El segundo termino corresponde al producto de la capacidad calorífica, la masa del relleno y $\frac{\partial T_g}{\partial t}$ al cambio de la temperatura del gas ($T_g$) en el tiempo. 
 \begin{equation}
 	m_g C_{p,g} L \frac{\partial T_g}{\partial x} + M_g C_{p,g} \frac{\partial T_g}{\partial t} = h_t A (T_b - T_g) 
 \end{equation}
+\
 \subsection{Características del regenerador}
 Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus propiedades se describen a continuación:
 \begin{table}[ht]
@@ -581,7 +582,7 @@ Por lo tanto, el coeficiente total de transferencia de calor es:
 	h_t = h_{lum} + h_r = 698.2040 + \num{1.5977e-5} + 0.3535 =  698.5575  W\cdot m^{-1} K^{-1} 
 \end{equation*}
 \subsection{Resumen de parámetros}
-Se opbtuvieron los siguientes parámetros para el caso de estudio que se esta abordando, están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes de las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
+Se obtuvieron los algunos parámetros para el caso de estudio que se esta abordando, están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes de las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
 \begin{table}[ht]
 	\caption{Coeficientes para el caso de estudio}
 	\begin{center}
@@ -603,15 +604,15 @@ Se opbtuvieron los siguientes parámetros para el caso de estudio que se esta ab
 	\end{center}
 \end{table}
 \section{Resumen de actividades}
-Se ha estado revisando los parámetros que se involucran para el desarrollo del modelo, se obtuvieron usando de referencia los trabajos presentados en este documento. Se continua trabajando con el método de diferencias finitas para programarlas usando Matlab.
+Se ha estado revisando los parámetros que se involucran para el desarrollo del modelo, se obtuvieron usando de referencia los trabajos presentados en este documento. Se continua trabajando con el método de diferencias finitas para programarlas usando MATLAB. Se espera obtener como es el comportamiento del gas a lo largo del regenerador mediante gráficas, una vez solucionado se espera probar otras variantes del modelo que se pueda aproximar a la realidad cuando ya se tenga la planta experimental.
 \newline
 Las actividades para el siguiente semestre:
 \begin{itemize}
-	\item Continuar con el modelado del regenerador mediante diferencias finitas
-	\item El desarrollo del diseño de experimentos y pruebas de en la planta experimental.
-	\item Comenzar con elaboración de un articulo reportando el modelo del regenerador que se esta proponiendo resolver mediante un método numérico.
+	\item Continuar con el modelado del regenerador mediante diferencias finitas o usando MATLAB
+	\item El desarrollo del diseño de experimentos y pruebas en la planta experimental.
+	\item Comenzar con elaboración de un articulo reportando el modelo del regenerador que se esta proponiendo resolver mediante un método numérico o MATLAB.
 	\item Presentar los resultados en el predoctoral al final del sexto semestre.
-	\item El requisito de idioma ya se ha cubierto y se tramitara la liberación de la retribución social.
+	\item El requisito de idioma ya se ha cubierto y se tramitara la liberación de la retribución social iniciando el sexto semestre.
 \end{itemize}   
 
 \newpage
@@ -627,8 +628,8 @@ Las actividades para el siguiente semestre:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\bibliographystyle{ieeetr}
-\bibliography{referencias_5sem}
+\textbf{\textbf{\bibliographystyle{ieeetr}
+\bibliography{referencias_5sem}}}
 
 %\begin{landscape}
 %	\appendix
