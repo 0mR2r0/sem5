@@ -1,7 +1,7 @@
 %Paqueterias
 \documentclass[12pt,letterpaper,final]{article}%Tipo de documento
 \usepackage[utf8]{inputenc}
-\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[spanish,es-nodecimaldot,es-tabla]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -85,23 +85,25 @@
 Este reporte presenta una revisión de algunos modelos de regeneradores de lecho empacado, un componente fundamental en diversos procesos industriales como la separación de gases, la purificación de líquidos y la recuperación de calor. Ademas, presentar una versión de un modelo de regenerador, así como la obtención de los parámetros que son necesarios para el desarrollo del mismo considerando aspectos físicos: las propiedades térmicas de la fase solida y gaseosa, del gas como el numero de Reynolds, porosidad del lecho, etc.
 
 \section{Revisión del estado del arte}
-En esta sección, se describen trabajos que son importantes para el desarrollo del modelado, ademas para revisar cuales son las diferencias entre modelos que tienen una estructura similar, que parámetros se están considerando para su solución, suposiciones de modelado, condiciones de frontera. Para tener una perspectiva mas amplia de como estas características funcionan para simplificar o aumentar su dificultar para obtener una solución. A continuacion se presenta cada trabajo, por su titulo original y se describe el modelo utilizado, consideraciones, condiciones iniciales y de frontera. 
+En esta sección, se describen trabajos que son importantes para el desarrollo del modelado, ademas para revisar cuales son las diferencias entre modelos que tienen una estructura similar, que parámetros se están considerando para su solución, suposiciones de modelado, condiciones de frontera e iniciales. Para tener una perspectiva mas amplia de como estas características funcionan para simplificar o aumentar su dificultar para obtener una solución. A continuacion se presenta cada trabajo, por su titulo original y se describe el modelo utilizado, consideraciones, condiciones iniciales y de frontera. 
 \subsection*{Modeling a heat regenerator-reactor with temperature dependent gas properties}
 La principal característica de los regeneradores de energía, es que en el mismo espacio de manera alternada puede contener dos gases. En el espacio vacío del regenerador, el gas mas caliente fluye y cede su energía térmica a las partes solidas (debe tener una alta capacidad y densidad térmica), posteriormente un gas frío recupera ese calor durante un intervalo de tiempo. Para este trabajo, se consideró como constante el coeficiente de transferencia de calor, pero tomó como variable la compresibilidad del gas. Se modeló asumiendo un sistema adiabático, la conductividad térmica del solido infinitamente normal al flujo del gas y cero paralelo al flujo, conexión ideal del gas, asumiendo que no existe dispersión del gas en las conexiones. El modelo se dividió en tres ecuaciones usando balances de energía y masa tradicionales, el sistema se considero cerrado a la entrada, las variaciones de la velocidad al inicio del regenerador no afecta sus condiciones de entrada, existe una pequeña acumulación de masa en el regenerador antes o después de completar el cambio de temperaturas. Para el periodo de calentamiento, la velocidad del gas incrementa y la densidad disminuye(disminución neta de masa). El balance del gas en cualquier posición axial, parte de \textit{la suma de razón de entalpía de entrada , la razón de salida y la transferida resulta en la razón de acumulación de la entalpía}\cite{Kulkarni1992} 
 \begin{equation}
 	\frac{\partial T_g}{\partial t} = -\frac{1}{\epsilon L}[u\frac{\partial T_g}{\partial z}+ \frac{ha_p L}{\rho u C_p}(T_g-T_s)]
 \end{equation}
-Donde $u$ es la velocidad del gas en $\frac{m}{s}$, $\epsilon$ es la porosidad del regenerador
+Donde $u$ es la velocidad del gas en $\frac{m}{s}$, $\epsilon$ es la porosidad del regenerador, $L$ indica la longitud del regenerador, $T_g$ y $T_s$ son las temperaturas del gas y del solido respectivamente, $h$ es el coeficiente global de transferencia de calor, $\rho$ corresponde a la densidad del gas, $C_p$ es la capacidad calorífica del gas. 
 \newline
 El balance de energía correspondiente al solido:
 \begin{equation}
 	\frac{dT_s}{dt} = \frac{ha_p}{(1-\epsilon)\rho_s C_{ps}}(T_g-T_s)
 \end{equation}
+Donde la $a_p$ es el área de la partícula, la densidad del solido $\rho_s$ y su capacidad calorífica del material.  
+\newline
 El balance de masa:
 \begin{equation}
 	\frac{du}{dz} = -\frac{Rha_pL}{PM_wC_p}(T_g-T_s)
 \end{equation}
-En el balance de masa se esta considerando z como adimensional $z=\frac{x}{L}$
+En el balance de masa se esta considerando z como adimensional $z=\frac{x}{L}$, $R$ es la constante de los gases ideales, $P$ es la presión total ejercida, $M_w$ corresponde al peso molecular del gas, 
 \newline
 Las condiciones iniciales y de frontera:
 \begin{equation*}
@@ -201,10 +203,14 @@ El modelo para un regenerador de lecho fijo, para la fase solida:
 \begin{equation}
 	M_s C_{ps}\frac{\partial T_s}{\partial \theta} = h a (T - t_h)
 \end{equation}
+De la ecuacion anterior, $M_s$ indica la masa de la fase solida, $C_{ps}$ es el valor de la capacidad calorífica, $h$ es el coeficiente global de transferencia de calor, $a$ es el área de transferencia de calor por unidad de volumen.  
+\newline
 Para la fase del fluido:
 \begin{equation}
 	\frac{G C_{pg}}{u}\frac{\partial t_h}{\partial \theta} + G C_{pg}\frac{\partial t_h}{\partial x} = ha(T_s - t_g)
 \end{equation}
+Donde $G$ es la velocidad del flujo de masa superficial, $C_{pg}$ nuestra la capacidad calorífica para el gas, $u$ es igual a la velocidad del gas y $t_h$ y $T_s$ son las temperatura caliente y la del solido.
+\newline
 Las condiciones iniciales y de equilibrio del proceso son:
 \begin{equation*}
 	t_h(0,t_h) = t_{h,i} = cte , \qquad 0<t_h<P_h
@@ -319,7 +325,28 @@ Se observo que las ecuaciones que indican el comportamiento del regenerador son 
 Los modelos que solo se basan en el balance de energía pueden proporcionar una aproximación útil, pero no capturan la complejidad del transporte de masa, lo que puede resultar en predicciones inexactas del comportamiento del regenerador. 
 \newline 
 Por otra parte, la inclusión del balance de masa en el modelo permite una descripción más completa del proceso, incluyendo la transferencia de masa entre las fases fluida y sólida\cite{Ramachadran1984}. De tal manera, se esta revisando como es un modelo de regenerador que solo involucre balances de energía, debido a que para el calculo de parámetros como el numero de Reynolds involucra de manera indirecta los efectos de la velocidad del gas dentro del regenerador. Para posteriormente comparar con modelos que incluyan balances de masa que de manera directa expresan efecto de la velocidad en el dispositivo.
+\newline
+En la siguiente tabla se muestra los métodos usado para la solución y que tipo de balance usaron los autores para el desarrollo de los modelos.
+\begin{table}[ht]
+	\caption{Tipo de modelo y método de solución}
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Autor& Modelado & Método de solución\\ \hline
+			Kulkarni\cite{Kulkarni1992}& Energía y masa& Colocación ortogonal \\ 
+			Ramachandran et. al. \cite{Ramachadran1984} & Energía(adimensional) &Colocación ortogonal polinomial \\
+			Sadrameli & Energía & Analítico y Diferencias finitas \\
+			Kilkovsky & Balance de energía & Método abieto de Willmott   \\
+			López-Torres & Balance de energia & Diferencias finitas \\
+			
+			\hline
+			
+			
+		\end{tabular}
+	\end{center}
+\end{table}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\newpage
 \section{Trabajo de tesis}
 \subsection{Propuesta de soluci\'on} 
 Se propone dise\~nar una planta de pruebas a partir de consideraciones t\'ecnicas y del modelo t\'ermico y de din\'amica de fluidos. De tal manera, este sistema servir\'a como punto de partida para analizar otras t\'ecnicas de modelado y compararlas entre si. Se espera que sirva de referente para el estudio de otro tipo de lechos o empaques para trabajos a futuro.
@@ -364,10 +391,11 @@ Por otra parte, esta ecuacion indica como es el comportamiento de la temperatura
 \subsection{Características del regenerador}
 Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus propiedades se describen a continuación:
 \begin{table}[ht]
+	\caption{Características del material de relleno}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Datos: Esferas} &unidades\\ \hline
+			\multicolumn{2}{ |c|}{Propiedades} &unidades\\ \hline
 			Diametro & 3 & $mm$ \\ 
 			Densidad & 2705 &$kg \cdot m^{-3}$ \\
 			Capacidad calorífica & 900 & $J\cdot kg^{-1} K^{-1}$ \\
@@ -383,10 +411,11 @@ Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus 
 \end{table}
 
 \begin{table}[ht]
+	\caption{Propiedades del aire}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Propiedades: Aire} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Propiedad¨} & unidades \\ \hline
 			Densidad & 1.2754  & $kg \cdot m^{-3}$ \\
 			Capacidad calorífica & 1.046 &$J \cdot kg^{-1} K^{-1}$ \\
 			Conductividad térmica & 0.025 & $W \cdot m^{-1} \cdot K^{-1}$ \\
@@ -404,13 +433,14 @@ Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus 
 \end{table}
 \textit{*Los valores de las viscosidades dinámica y cinemática están definidas a presión atmosférica}
 \begin{table}[ht!]
+	\caption{Variables y constantes de las ecuaciones (\ref{Gas}) y (\ref{Solido}) }
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Datos del modelo:Variables} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Modelo:Variables} & unidades \\ \hline
 			$T_b$ & Temperatura del relleno(empaquetado) & $^\circ C$ \\ 
 			$T_g$ &  Temperatura del gas & $^\circ C$ \\ \hline
-			\multicolumn{2}{ |c|}{Datos del modelo: Constantes} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Modelo: Constantes} & unidades \\ \hline
 			$M_b$ & Masa del relleno (empaquetado) & $kg$ \\
 			$C_{p,b}$&  Capacidad calorífica del relleno & $J \cdot kg^{-1} \cdot K^{-1} $ \\
 			$h_t$ & Coeficiente global de transferencia de calor & $W \cdot m^{-2} \cdot K^{-1}$ \\
@@ -551,12 +581,13 @@ Por lo tanto, el coeficiente total de transferencia de calor es:
 	h_t = h_{lum} + h_r = 698.2040 + \num{1.5977e-5} + 0.3535 =  698.5575  W\cdot m^{-1} K^{-1} 
 \end{equation*}
 \subsection{Resumen de parámetros}
-Los parámetros obtenidos están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes necesarios para las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
+Se opbtuvieron los siguientes parámetros para el caso de estudio que se esta abordando, están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes de las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
 \begin{table}[ht]
+	\caption{Coeficientes para el caso de estudio}
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Datos del modelo: Constantes}&cantidad & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Coeficiente}&cantidad & unidades \\ \hline
 			$M_b$ & Masa del relleno (empaquetado) & 0.1882 & $kg$ \\
 			$C_{p,b}$&  Capacidad calorífica del relleno & 900 & $J \cdot kg^{-1} \cdot K^{-1} $ \\
 			$h_t$ & Coeficiente global de transferencia de calor&698.5575 & $W \cdot m^{-2} \cdot K^{-1}$ \\
