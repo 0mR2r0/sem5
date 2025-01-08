@@ -12,6 +12,20 @@
 \usepackage{gensymb}
 \usepackage{stix2}
 \usepackage{siunitx}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage[dvipsnames]{xcolor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstset{language=Python,upquote=true,
+	basicstyle=\ttfamily\small,numbers=left,
+	numberstyle=\tiny,stepnumber=1,numbersep=5pt,
+	backgroundcolor=\color{white},frame=single,tabsize=2,
+	showspaces=false,showstringspaces=false,showtabs=false,
+	breaklines=true,breakatwhitespace=true,escapeinside=||,
+	keywordstyle=\color{blue!70},stringstyle=\color{green!70!black!70},
+	commentstyle=\color{black!80}\it
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \graphicspath{{images/}}
 \baselinestretch
 \renewcommand{\baselinestretch}{1.25}%Comando de interlineado
@@ -58,7 +72,7 @@
 		\vspace{0.2cm}
 		{\bfseries Co-Directora de tesis: \par}
 		\vspace{0.2cm}
-		{Dra. Ma. Guadalupe L\'opez L\'opez \par}
+		{Dra. Maria Guadalupe L\'opez L\'opez \par}
 		\vspace{0.2cm}
 		{\bfseries Comit\'e revisor: \par}
 		\vspace{0.2cm}
@@ -84,26 +98,23 @@
 \section{Introduci\'on}
 Este reporte presenta una revisión de algunos modelos de regeneradores de lecho empacado, un componente fundamental en diversos procesos industriales como la separación de gases, la purificación de líquidos y la recuperación de calor. Ademas, presentar una versión de un modelo de regenerador, así como la obtención de los parámetros que son necesarios para el desarrollo del mismo considerando aspectos físicos: las propiedades térmicas de la fase solida y gaseosa, del gas como el numero de Reynolds, porosidad del lecho, etc.
 
-\section{Revisión del estado del arte}
-En esta sección, se describen trabajos que son importantes para el desarrollo del modelado, ademas para revisar cuales son las diferencias entre modelos que tienen una estructura similar, que parámetros se están considerando para su solución, suposiciones de modelado, condiciones de frontera e iniciales. Para tener una perspectiva mas amplia de como estas características funcionan para simplificar o aumentar su dificultar para obtener una solución. A continuacion se presenta cada trabajo, por su titulo original y se describe el modelo utilizado, consideraciones, condiciones iniciales y de frontera. 
-\subsection*{Modeling a heat regenerator-reactor with temperature dependent gas properties}
-La principal característica de los regeneradores de energía, es que en el mismo espacio de manera alternada puede contener dos gases. En el espacio vacío del regenerador, el gas mas caliente fluye y cede su energía térmica a las partes solidas (debe tener una alta capacidad y densidad térmica), posteriormente un gas frío recupera ese calor durante un intervalo de tiempo. Para este trabajo, se consideró como constante el coeficiente de transferencia de calor, pero tomó como variable la compresibilidad del gas. Se modeló asumiendo un sistema adiabático, la conductividad térmica del solido infinitamente normal al flujo del gas y cero paralelo al flujo, conexión ideal del gas, asumiendo que no existe dispersión del gas en las conexiones. El modelo se dividió en tres ecuaciones usando balances de energía y masa tradicionales, el sistema se considero cerrado a la entrada, las variaciones de la velocidad al inicio del regenerador no afecta sus condiciones de entrada, existe una pequeña acumulación de masa en el regenerador antes o después de completar el cambio de temperaturas. Para el periodo de calentamiento, la velocidad del gas incrementa y la densidad disminuye(disminución neta de masa). El balance del gas en cualquier posición axial, parte de \textit{la suma de razón de entalpía de entrada , la razón de salida y la transferida resulta en la razón de acumulación de la entalpía}\cite{Kulkarni1992} 
+\section{Revisión de artículos}
+\subsection*{Modelado de un regenerador-reactor de calor con propiedades de gas dependientes de la temperatura (Modeling a heat regenerator-reactor with temperature dependent gas properties)}
+La principal característica de los regeneradores de energía es que, en el mismo espacio, puede contener dos gases de manera alternada. En el espacio vacío del regenerador, el gas más caliente fluye y cede su energía térmica a las partes sólidas (que deben tener una alta capacidad y densidad térmica). Posteriormente, un gas frío recupera ese calor durante un intervalo de tiempo. Para este trabajo, se consideró constante el coeficiente de transferencia de calor, pero se tomó como variable la compresibilidad del gas. Se modeló asumiendo un sistema adiabático, con la conductividad térmica del sólido infinitamente normal al flujo del gas y cero paralelo al flujo, con conexión ideal del gas, asumiendo que no existe dispersión del gas en las conexiones. El modelo se dividió en tres ecuaciones usando balances de energía y masa tradicionales. El sistema se consideró cerrado a la entrada, las variaciones de la velocidad al inicio del regenerador no afectan sus condiciones de entrada, y existe una pequeña acumulación de masa en el regenerador antes o después de completar el cambio de temperaturas. Durante el periodo de calentamiento, la velocidad del gas incrementa y la densidad disminuye (disminución neta de masa). El balance del gas en cualquier posición axial parte de la suma de razón de entalpía de entrada, la razón de salida y la transferida resulta en la razón de acumulación de la entalpía \cite{Kulkarni1992}.
 \begin{equation}
 	\frac{\partial T_g}{\partial t} = -\frac{1}{\epsilon L}[u\frac{\partial T_g}{\partial z}+ \frac{ha_p L}{\rho u C_p}(T_g-T_s)]
 \end{equation}
-Donde $u$ es la velocidad del gas en $\frac{m}{s}$, $\epsilon$ es la porosidad del regenerador, $L$ indica la longitud del regenerador, $T_g$ y $T_s$ son las temperaturas del gas y del solido respectivamente, $h$ es el coeficiente global de transferencia de calor, $\rho$ corresponde a la densidad del gas, $C_p$ es la capacidad calorífica del gas. 
+Donde $u$ es la velocidad del gas en $\frac{m}{s}$, $\epsilon$ es la porosidad del regenerador
 \newline
 El balance de energía correspondiente al solido:
 \begin{equation}
 	\frac{dT_s}{dt} = \frac{ha_p}{(1-\epsilon)\rho_s C_{ps}}(T_g-T_s)
 \end{equation}
-Donde la $a_p$ es el área de la partícula, la densidad del solido $\rho_s$ y su capacidad calorífica del material.  
-\newline
 El balance de masa:
 \begin{equation}
 	\frac{du}{dz} = -\frac{Rha_pL}{PM_wC_p}(T_g-T_s)
 \end{equation}
-En el balance de masa se esta considerando z como adimensional $z=\frac{x}{L}$, $R$ es la constante de los gases ideales, $P$ es la presión total ejercida, $M_w$ corresponde al peso molecular del gas, 
+En el balance de masa se esta considerando z como adimensional $z=\frac{x}{L}$
 \newline
 Las condiciones iniciales y de frontera:
 \begin{equation*}
@@ -132,11 +143,11 @@ Las correlaciones semi-empiricas para el coeficiente de transferencia de calor p
 	Nu = \frac{hd_p}{k_g} \quad Re = \frac{d_p u\rho}{\mu} \quad Pr=\frac{C_p \mu }{k_g}
 \end{equation*}
 
-\subsection*{Solution by triple collocation for periodic operation of heat regenerators}
+\subsection*{Solución mediante colocación triple para la operación periódica de regeneradores de calor (Solution by triple collocation for periodic operation of heat regenerators)}
 
-El método basado en colocación triple ha sido desarrollado para simulación de regeneradores de energía mediante un modelo lineal. El problema se reduce a un conjunto de ecuaciones algebraicas lineales. El problema del valor inicial en un regenerador al arranque y durante su operación puede ser resuelto por este método para cualquier modelo de ecuaciones. 
-\newline
-Los regeneradores de calor son usados de manera extensa en procesos industriales donde el gas se encuentra disponible a temperaturas altas y bajas. Algunos ejemplos importantes, recuperación de calor en centrales termoeléctricas, pre-calentamiento de aire, recuperación de calor de los gases de desperdicio en la fundición del hierro,en la manufacturación del vidrio, almacenamiento de energía solar, etc \cite{Ramachadran1984}.
+El método basado en colocación triple ha sido desarrollado para la simulación de regeneradores de energía mediante un modelo lineal. El problema se reduce a un conjunto de ecuaciones algebraicas lineales. El problema del valor inicial en un regenerador al arranque y durante su operación puede ser resuelto por este método para cualquier modelo de ecuaciones.
+
+Los regeneradores de calor se usan ampliamente en procesos industriales donde el gas está disponible a altas y bajas temperaturas. Algunos ejemplos importantes incluyen la recuperación de calor en centrales termoeléctricas, el precalentamiento de aire, la recuperación de calor de los gases de desperdicio en la fundición del hierro, en la manufactura del vidrio, el almacenamiento de energía solar, etc \cite{Ramachadran1984}.
 \newline
 \subsubsection*{Ecuaciones del modelo}
 Las ecuaciones del modelo en su forma adimensional describen un empaquetado de un regenerador con la siguiente forma:
@@ -149,7 +160,7 @@ La siguiente corresponde a un balance de energía para indicar la temperatura de
 \begin{equation}
 	\frac{1}{y^2}\frac{\partial}{\partial y}(y^2\frac{\partial \theta_{ph}}{\partial y}) = \frac{\partial \theta_{ph}}{\partial t} 
 \end{equation}
-La dirección en $x$ y $y$ son para referirse a la posición axial adimensional dentro del regenerador y a la forma esférica de la partícula respectivamente. $\theta_h$ es la temperatura de la masa del gas dentro del regenerador durante el periodo de calentamiento, para una posición en $x$ y un tiempo $t$. $\theta_{ph}$ es la temperatura de la partícula durante el periodo de calentamiento para una posición $x$ dentro del regenerador y una posición radial en $y$ en el tiempo. Finalmente, $\theta_{phs}=\theta_{ph}(x,y=1,t)$ es la temperatura externa de la superficie de la esfera.
+La dirección en $x$ y $y$ se refiere a la posición axial adimensional dentro del regenerador y a la forma esférica de la partícula, respectivamente. $\theta_h$ es la temperatura de la masa del gas dentro del regenerador durante el periodo de calentamiento, para una posición en $x$ y un tiempo $t$. $\theta_{ph}$ es la temperatura de la partícula durante el periodo de calentamiento, para una posición $x$ dentro del regenerador y una posición radial en $y$ en el tiempo $t$. Finalmente, $\theta_{phs}=\theta_{ph}(x,y=1,t)$ es la temperatura externa de la superficie de la esfera.
 \newline
 Las condiciones de frontera son:
 \begin{equation}
@@ -164,7 +175,7 @@ Las condiciones de frontera son:
 \begin{equation}
 	x = 1, \qquad \frac{1}{Bi}\frac{\partial \theta_{ph}}{\partial y} = \theta_h - \theta_{phs}
 \end{equation}
-Donde $\theta_{h,en}$ es la entrada adimensional de la temperatura del gas caliente. La ecuaciones y condiciones de frontera están basadas según la suposición, la transferencia de energía ocurre mediante flujo másico, la dispersión es axial en la fase gaseosa, la transferencia entre fluido, partículas y su parte interna es por conducción, no se consideró la transferencia de calor por radiación y conducción entre partículas. Las propiedades físicas y parámetros de transporte se asumen independientes de la temperatura. La condición inicial para la parte interna de las partículas es la siguiente:
+Donde $\theta_{h,en}$ es la entrada adimensional de la temperatura del gas caliente. Las ecuaciones y condiciones de frontera están basadas en la suposición de que la transferencia de energía ocurre mediante flujo másico. La dispersión es axial en la fase gaseosa, la transferencia de energía entre el fluido, las partículas y su parte interna es por conducción. No se consideró la transferencia de calor por radiación y conducción entre partículas. Las propiedades físicas y los parámetros de transporte se asumen independientes de la temperatura. La condición inicial para la parte interna de las partículas es la siguiente:
 \begin{equation}
 	t=0, \qquad \theta_{ph} = \theta_{ph0}(y,x)
 \end{equation}
@@ -179,38 +190,24 @@ El valor de $\theta_{ph0}$ representa la temperatura inicial que se distribuye p
 	
 \end{itemize}
 
-\subsection*{Mathematical models for the simulation of thermal regenerators:
-	A state-of-the-art review}
-Los regeneradores de lecho fijo pueden estar identificados por dos tipos: rotatorios o de lecho fijo. En un lecho fijo el regenerador almacena materiales que son fijos dentro, y el uso de válvulas solenoides permiten el paso de gas caliente o frío de manera alternada. Liberando su calor al lecho durante el periodo de calentamiento, posteriormente un flujo frío absorbe ese calor que ganó el lecho durante el calentamiento, y esto corresponde al periodo de enfriamiento. Es común el uso de materiales como: aluminio, acero, vidrio para el armado del lecho\cite{SADRAMELI2016}.
+\subsection*{Modelos matemáticos para la simulación de regeneradores térmicos: Un análisis del estado del arte (Mathematical models for the simulation of thermal regenerators:
+	A state-of-the-art review)}
+Los regeneradores de lecho fijo pueden clasificarse en dos tipos: rotatorios y de lecho fijo. En un regenerador de lecho fijo, los materiales que almacenan el calor permanecen estáticos en su interior. El uso de válvulas solenoides permite el paso alternado de gas caliente y frío. Durante el periodo de calentamiento, el gas caliente fluye a través del lecho, transfiriendo su calor a los materiales. Posteriormente, un flujo de gas frío pasa a través del lecho, absorbiendo el calor almacenado durante el periodo de calentamiento. Esto corresponde al periodo de enfriamiento.
+Es común el uso de materiales como aluminio, acero y vidrio para el armado del lecho, debido a sus propiedades térmicas y estructurales \cite{SADRAMELI2016}.
 \newline
 El modelo esta basado según las siguientes consideraciones:
 \begin{itemize}
-	\item Las propiedades térmicas y físicas del gas y el solido son constantes e independientes de la temperatura y posición.
-	\item No existe perdida de calor del regenerador hacia el ambiente.
-	\item No hay fuentes de energía que ocurran dentro del regenerador ni reacciones químicas internas
-	\item La capacidad térmica del gas dentro del lecho en cualquier instante es pequeña comparada con el lecho mismo.
-	\item Los coeficientes de flujo másico y de transferencia de calor son constantes
-	\item La velocidad de entrada y la temperatura para cada fluidos son uniformes a través de la sección transversal y constantes en el tiempo
-	\item La conductividad térmica del solido es infinitamente mas grande en la dirección normal al flujo del gas e infinitamente pequeña en la dirección paralela del flujo.
-	\item No existe dispersión de flujo dentro del regenerador.
-	\item La transferencia de calor del fluido es insignificante longitudinal y transversalmente.
-	\item El espacio vacío y la superficie de contacto del lecho son uniformes.
-	\item El tiempo de residencia del gas dentro del lecho es insignificante en comparación al periodo.
-	\item La transferencia de calor por radiación es pequeña en comparación con otros mecanismos de transferencia.
+	\item Las propiedades térmicas y físicas del gas y el sólido son constantes e independientes de la temperatura y posición. \item No existe pérdida de calor del regenerador hacia el ambiente. \item No hay fuentes de energía que ocurran dentro del regenerador ni reacciones químicas internas. \item La capacidad térmica del gas dentro del lecho en cualquier instante es pequeña comparada con el lecho mismo. \item Los coeficientes de flujo másico y de transferencia de calor son constantes. \item La velocidad de entrada y la temperatura para cada fluido son uniformes a través de la sección transversal y constantes en el tiempo. \item La conductividad térmica del sólido es infinitamente mayor en la dirección normal al flujo del gas e infinitamente menor en la dirección paralela al flujo. \item No existe dispersión de flujo dentro del regenerador. \item La transferencia de calor del fluido es insignificante tanto longitudinal como transversalmente. \item El espacio vacío y la superficie de contacto del lecho son uniformes. \item El tiempo de residencia del gas dentro del lecho es insignificante en comparación con el periodo. \item La transferencia de calor por radiación es pequeña en comparación con otros mecanismos de transferencia.
 \end{itemize}
 \subsubsection*{Modelo}
 El modelo para un regenerador de lecho fijo, para la fase solida:
 \begin{equation}
 	M_s C_{ps}\frac{\partial T_s}{\partial \theta} = h a (T - t_h)
 \end{equation}
-De la ecuacion anterior, $M_s$ indica la masa de la fase solida, $C_{ps}$ es el valor de la capacidad calorífica, $h$ es el coeficiente global de transferencia de calor, $a$ es el área de transferencia de calor por unidad de volumen.  
-\newline
 Para la fase del fluido:
 \begin{equation}
 	\frac{G C_{pg}}{u}\frac{\partial t_h}{\partial \theta} + G C_{pg}\frac{\partial t_h}{\partial x} = ha(T_s - t_g)
 \end{equation}
-Donde $G$ es la velocidad del flujo de masa superficial, $C_{pg}$ nuestra la capacidad calorífica para el gas, $u$ es igual a la velocidad del gas y $t_h$ y $T_s$ son las temperatura caliente y la del solido.
-\newline
 Las condiciones iniciales y de equilibrio del proceso son:
 \begin{equation*}
 	t_h(0,t_h) = t_{h,i} = cte , \qquad 0<t_h<P_h
@@ -239,9 +236,9 @@ Se resolvió el modelo redefiniendo los parámetros de longitud, temperatura y t
 \begin{equation*}
 	z_2 = \frac{(t-\frac{x}{u_2})}{P_2}
 \end{equation*}
-\subsection*{Review of Design and Modeling of Regenerative
-	Heat Exchangers}
-	Los regeneradores de energía, son dispositivos que usan de manera indirecta el intercambio de energía con medios fríos y calientes. El uso principal se encuentra en el área de la metalurgia, el tratamiento y pre-calentamiento del aire, recuperación del calor residual y en turbinas. En este trabajo se aplico el método abierto de Willmott, que mostró una gran estabilidad y permitieron la inclusión de ecuaciones que describen la transferencia de calor y la caída de presión. La ventaja de los regeneradores sobre los recuperadores es por su mayor área de contacto con relación a su capacidad volumétrica. Varios materiales y formas pueden usarse como material de relleno en el regenerador, porque los sólidos tienen una gran capacidad calorífica en comparación con los gases. Para pequeños regeneradores pueden usarse rellenos como los de panal de abeja, esferas, monolitos, anillos, monturas, etc.  \cite{Kilkovsky2020}
+\subsection*{Revisión del Diseño y Modelado de Intercambiadores de Calor Regenerativos (Review of Design and Modeling of Regenerative
+	Heat Exchangers)}
+Los regeneradores de energía son dispositivos que usan de manera indirecta el intercambio de energía con medios fríos y calientes. El uso principal se encuentra en el área de la metalurgia, el tratamiento y precalentamiento del aire, la recuperación del calor residual y en turbinas. En este trabajo se aplicó el método abierto de Willmott, que mostró una gran estabilidad y permitió la inclusión de ecuaciones que describen la transferencia de calor y la caída de presión. La ventaja de los regeneradores sobre los recuperadores es su mayor área de contacto en relación con su capacidad volumétrica. Varios materiales y formas pueden usarse como material de relleno en el regenerador, ya que los sólidos tienen una gran capacidad calorífica en comparación con los gases. Para pequeños regeneradores, pueden usarse rellenos como los de panal de abeja, esferas, monolitos, anillos, monturas, etc.  \cite{Kilkovsky2020}
 \subsubsection*{Modelo}
 \begin{equation}
 	M_b C_{p,b}\frac{\partial T_b}{\partial t} = h_t A (T_g - T_b) 
@@ -252,7 +249,7 @@ Donde $M_b$ es la masa del relleno ($kg$), $T_b$ es la temperatura media del rel
 \end{equation} 
 Donde $m_g$ es el flujo másico del gas $(\frac{kg}{s})$, $C_{p,g}$ es la capacidad calorífica del gas y $L$ es la longitud del regenerador $(m)$. 
 \subsubsection*{Parámetros del modelo}
-\textbf{Porosidad}
+\textbf{Espacio vacío}
 \newline
 El valor de $\epsilon$ es la razón del volumen disponible respecto a el volumen total del relleno:
 \begin{equation}
@@ -268,11 +265,11 @@ El diámetro puede definirse como el de una esfera.
 \end{equation}
 \textbf{Coeficiente global de transferencia de calor}
 \newline
-Para calcular este coeficiente se puede obtener de la siguiente manera según Hausen\cite{Hausen1976}:
+Para calcular este coeficiente se puede obtener de la siguiente manera segun Hausen\cite{Hausen1976}:
 \begin{equation}
 	h_t= \frac{1}{c} + \frac{1}{2(n+2)\lambda_b}\phi H + \frac{1}{h_r}
 \end{equation}
-El termino del coeficiente de fricción se obtuvo mediante el numero de Reynolds y usando la relación de Hicks\cite{Hicks1970}.
+El termino del coeficiente de fricción se obtuvo mediante el numero de Reynolds y usando la relacion de Hicks\cite{Hicks1970}.
 \newline
 La función $\phi H$ llamado factor de Hausen, intenta representar el efecto de la rapidez del cambio de temperatura dentro del empaquetado al inicio de un periodo de calentamiento o enfriamiento\cite{HINCHCLIFFE1981}.
 \begin{equation}
@@ -307,7 +304,7 @@ Para la condición de frontera en la entrada del lecho:
 \begin{equation}
 	T=T_{en}
 \end{equation}
-En la salida del regenerador, tanto para el solido como para el fluido, al no existir mas lecho, el solido no puede intercambiar mas calor y ademas el fluido en la salida no intercambia calor con el fluido al frente:
+En la salida del regenerador, tanto para el solido como para el fluido, al no exitir mas lecho, el solido no puede intercambiar mas calor y ademas el fluido en la salida no intercambia calor con el fluido al frente:
 \begin{equation}
 	\frac{\partial T}{\partial x} = 0, \qquad x=L
 \end{equation}
@@ -321,33 +318,14 @@ Para la fase del fluido que envuelve las partículas del fluido:
 \end{equation}
 \subsection{Conclusión de la revisión del estado del arte}
 
-Se observo que las ecuaciones que indican el comportamiento del regenerador son similares a las empleadas en otros procesos de transferencia de calor y masa\cite{Kilkovsky2020}\cite{Kulkarni1992}\cite{SADRAMELI2016}, lo que permite un análisis comparativo y una comprensión más profunda de la dinámica del sistema.
-Los modelos que solo se basan en el balance de energía pueden proporcionar una aproximación útil, pero no capturan la complejidad del transporte de masa, lo que puede resultar en predicciones inexactas del comportamiento del regenerador. 
-\newline 
-Por otra parte, la inclusión del balance de masa en el modelo permite una descripción más completa del proceso, incluyendo la transferencia de masa entre las fases fluida y sólida\cite{Ramachadran1984}. De tal manera, se esta revisando como es un modelo de regenerador que solo involucre balances de energía, debido a que para el calculo de parámetros como el numero de Reynolds involucra de manera indirecta los efectos de la velocidad del gas dentro del regenerador. Para posteriormente comparar con modelos que incluyan balances de masa que de manera directa expresan efecto de la velocidad en el dispositivo.
-\newline
-En la siguiente tabla se muestra los métodos usado para la solución y que tipo de balance usaron los autores para el desarrollo de los modelos.
-\begin{table}[ht]
-	\caption{Tipo de modelo y método de solución}
-	\begin{center}
-		\begin{tabular}{|c|c|c|}
-			\hline
-			Autor& Modelado & Método de solución\\ \hline
-			Kulkarni\cite{Kulkarni1992}& Energía y masa& Colocación ortogonal \\ 
-			Ramachandran et. al. \cite{Ramachadran1984} & Energía(adimensional) &Colocación ortogonal polinomial \\
-			Sadrameli \cite{SADRAMELI2016}& Energía & Analítico y Diferencias finitas \\
-			Kilkovsky \cite{Kilkovsky2020}& Balance de energía & Método abieto de Willmott   \\
-			López-Torres \cite{Lopez2013} & Balance de energia & Diferencias finitas \\
-			
-			\hline
-			
-			
-		\end{tabular}
-	\end{center}
-\end{table}
+Se observó que las ecuaciones que indican el comportamiento del regenerador son similares a las empleadas en otros procesos de transferencia de calor y masa \cite{Kilkovsky2020} \cite{Kulkarni1992} \cite{SADRAMELI2016}, lo que permite un análisis comparativo y una comprensión más profunda de la dinámica del sistema.
+
+Los modelos que solo se basan en el balance de energía pueden proporcionar una aproximación útil, pero no capturan la complejidad del transporte de masa, lo que puede resultar en predicciones inexactas del comportamiento del regenerador.
+
+Por otra parte, la inclusión del balance de masa en el modelo permite una descripción más completa del proceso, incluyendo la transferencia de masa entre las fases fluida y sólida \cite{Ramachadran1984}. De esta manera, se está revisando cómo es un modelo de regenerador que solo involucra balances de energía, debido a que para el cálculo de parámetros como el número de Reynolds, involucra de manera indirecta los efectos de la velocidad del gas dentro del regenerador. Posteriormente, se comparará con modelos que incluyan balances de masa, los cuales expresan de manera directa el efecto de la velocidad en el dispositivo.
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \newpage
-\section{Trabajo de tesis}
+
 \subsection{Propuesta de soluci\'on} 
 Se propone dise\~nar una planta de pruebas a partir de consideraciones t\'ecnicas y del modelo t\'ermico y de din\'amica de fluidos. De tal manera, este sistema servir\'a como punto de partida para analizar otras t\'ecnicas de modelado y compararlas entre si. Se espera que sirva de referente para el estudio de otro tipo de lechos o empaques para trabajos a futuro.
 \subsection{Objetivo general}
@@ -380,23 +358,72 @@ En la salida del regenerador, tanto para el solido como para el fluido, al no ex
 	\frac{\partial T}{\partial x} = 0, \qquad x=L
 \end{equation}
 \subsection{Modelo}
-En este modelo se definieron dos ecuaciones, El primer termino de la ecuacion [31]es un balance de energía, el primer termino muestra el producto de la masa de relleno($M_b$), la capacidad calorífica del mismo($C_{p,b}$), a lo largo del regenerador($L$) y su cambio con respecto al tiempo de la temperatura $T_b$. Igualando al coeficiente de transferencia total de transferencia de calor $h_t$, el área de contacto $A$, y la diferencia de temperatura en las fases(solida y gas).
+El modelo de estudio se consideraron dos sistemas de ecuaciones:
 \begin{equation}\label{Gas}
 	M_b C_{p,b}\frac{\partial T_b}{\partial t} = h_t A (T_g - T_b) 
 \end{equation}
-Por otra parte, esta ecuacion indica como es el comportamiento de la temperatura del gas a lo largo del regenerador con la derivada parcial de $T_g$, capacidad calorífica del gas $C_{p,g}$ y el flujo másico. El segundo termino corresponde al producto de la capacidad calorífica, la masa del relleno y $\frac{\partial T_g}{\partial t}$ al cambio de la temperatura del gas ($T_g$) en el tiempo. 
+ 
 \begin{equation}
 	m_g C_{p,g} L \frac{\partial T_g}{\partial x} + M_g C_{p,g} \frac{\partial T_g}{\partial t} = h_t A (T_b - T_g) 
 \end{equation}
-\
+\subsubsection{Desarrollo del modelo}
+Para darle solución a las ecuaciones \ref{Solido} y \ref{Gas}, se dividió el problema solucionando el modelo sin los parámetros para ver las variables para ver el comportamiento de las ecuaciones, para que posteriormente incluirlos y ver el comportamiento completo del modelo.
+Se optó por solucionar el modelo usando el método de diferencias finitas que a continuación se mostrará el desarrollo matemático.
+\newline 
+ \begin{equation}
+ 	\frac{\partial T_b}{\partial t} = (T_g - T_b) 
+ \end{equation}
+ 
+ \begin{equation}
+ 	\frac{\partial T_g}{\partial x} + \frac{\partial T_g}{\partial t} = (T_b - T_g) 
+ \end{equation}
+\subsubsection{Aplicación del método de diferencias finitas}
+En este método de discretización, se caracteriza por convertir las ecuaciones diferenciales parciales, a un conjunto de ecuaciones por diferencias que sirven para aproximar a las ecuaciones originales. Se utilizó la aproximación de tipo central, porque es con el mecanismo de transferencia de calor, porque cada punto que se discretiza a lo largo del regenerador $0\leq x\leq L$ se va obteniendo el valor de la temperatura tomando en cuenta el valor del punto anterior y el valor del punto siguiente para obtener el punto que se esta evaluando.
+\begin{equation*}
+	\frac{d T_b}{d t} = T_{g_i} - T_{b_i}
+\end{equation*} 
+\begin{equation*}
+	\frac{d T_g}{d t} = (T_{b_i} - T_{g_i}) - \frac{T_{g_{i+1}} - T_{g_{i-1}} }{2\Delta x}   
+\end{equation*}
+Al aplicar las diferencias finitas para indicar la discretización en el espacio se coloca con un subíndice $i$ en cada variable que dependan de $x$. De tal manera que las ecuaciones que inicialmente era dependiente tanto de $x$ y $t$ ahora solo dependen de $t$ y se indica en una derivada ordinaria.
+\newline
+Posteriormente como también se discretizó en el tiempo los términos del lado izquierdo de las ecuaciones queda de la siguiente manera.
+\begin{equation*}
+	\frac{T_{b_i}^{n + 1} - T_{b_i}^{n}  }{\Delta t} = T_{g_i}^n - T_{b_i}^n
+\end{equation*} 
+\begin{equation*}
+	\frac{ T_{g_i}^{n + 1} - T_{g_i}^{n}   }{\Delta t} = (T_{b_i}^n - T_{g_i}^n) - \frac{T_{g_{i+1}}^n - T_{g_{i-1}}^n }{\Delta x}   
+\end{equation*}
+ Cuando se discretiza en el tiempo se debe tomar en cuenta el criterio de convergencia Courant-Friedrichs-Lewy (CFL) \cite{ZillCullen2008} $ \frac{u\Delta t}{\Delta x}$ para mantenerla estabilidad y la precisión de la solución numérica. Con la discretización en el tiempo lo que se busca encontrar los valores en el siguiente instante de tiempo, por eso la derivada en función del tiempo se utiliza su aproximación en diferencias hacia adelante solo para el tiempo.
+ \newline
+ De tal manera, se iguala al termino con la posición en el tiempo hacia adelante($n+1$), entonces el sistema de ecuaciones es:
+ 
+\begin{equation*}
+	T_{b_i}^{n + 1} =  T_{b_i}^{n} + \Delta t (T_{g_i}^n - T_{b_i}^n)
+\end{equation*} 
+\begin{equation*}
+	T_{g_i}^{n + 1} = T_{g_i}^{n} + \Delta t(T_{b_i}^n - T_{g_i}^n) -   \frac{\Delta t}{\Delta x} ( T_{g_{i+1}}^n - T_{g_{i-1}}^n  )  
+\end{equation*} 
+  Con las ecuaciones anteriores se dio solución usando Python, del cual se obtuvieron las siguientes graficas, el código esta en el anexo \ref{Codigo1}:
+  
+  \begin{figure}[ht!]
+  	\begin{center}
+  		\includegraphics[scale=.6]{solucion.png}
+  		\caption{Solución del sistema de ecuaciones}	
+  	\end{center}	
+  \end{figure}
+  En el gráfico del lado izquierdo, se muestra el comportamiento de cómo sería la temperatura a lo largo del regenerador para un instante de tiempo de $0 \leq t \leq 1$. Las líneas representan cada posición del regenerador, partiendo de una temperatura de 25 grados Celsius, que corresponde a la condición inicial propuesta. La gráfica del lado derecho muestra cómo la energía va cediendo al sólido. Se estableció una condición de tipo Dirichlet en la frontera izquierda, dejando una temperatura fija de 200 grados Celsius en $x=0$. Por el lado derecho, se estableció una condición de frontera de Neumann $\frac{\partial T_g}{\partial x} = 0$ en $x=L$. Por esa razón, ese extremo va cambiando conforme se va calentando el regenerador. Los parámetros que no se incluyen por el momento solo afectan la forma de las curvas, pero el comportamiento sería similar al mostrado. 
+  \newline
+   En el anexo \ref{Codigo2} se muestra el código usando otra manera de resolver el modelo de Lopez-Torres usando una biblioteca de Python para resolver ecuaciones diferenciales.
+  
+ \newpage 
 \subsection{Características del regenerador}
 Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus propiedades se describen a continuación:
 \begin{table}[ht]
-	\caption{Características del material de relleno}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Propiedades} &unidades\\ \hline
+			\multicolumn{2}{ |c|}{Datos: Esferas} &unidades\\ \hline
 			Diametro & 3 & $mm$ \\ 
 			Densidad & 2705 &$kg \cdot m^{-3}$ \\
 			Capacidad calorífica & 900 & $J\cdot kg^{-1} K^{-1}$ \\
@@ -412,11 +439,10 @@ Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus 
 \end{table}
 
 \begin{table}[ht]
-	\caption{Propiedades del aire}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Propiedad¨} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Propiedades: Aire} & unidades \\ \hline
 			Densidad & 1.2754  & $kg \cdot m^{-3}$ \\
 			Capacidad calorífica & 1.046 &$J \cdot kg^{-1} K^{-1}$ \\
 			Conductividad térmica & 0.025 & $W \cdot m^{-1} \cdot K^{-1}$ \\
@@ -434,14 +460,13 @@ Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus 
 \end{table}
 \textit{*Los valores de las viscosidades dinámica y cinemática están definidas a presión atmosférica}
 \begin{table}[ht!]
-	\caption{Variables y constantes de las ecuaciones (\ref{Gas}) y (\ref{Solido}) }
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Modelo:Variables} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Datos del modelo:Variables} & unidades \\ \hline
 			$T_b$ & Temperatura del relleno(empaquetado) & $^\circ C$ \\ 
 			$T_g$ &  Temperatura del gas & $^\circ C$ \\ \hline
-			\multicolumn{2}{ |c|}{Modelo: Constantes} & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Datos del modelo: Constantes} & unidades \\ \hline
 			$M_b$ & Masa del relleno (empaquetado) & $kg$ \\
 			$C_{p,b}$&  Capacidad calorífica del relleno & $J \cdot kg^{-1} \cdot K^{-1} $ \\
 			$h_t$ & Coeficiente global de transferencia de calor & $W \cdot m^{-2} \cdot K^{-1}$ \\
@@ -456,9 +481,31 @@ Se tienen los siguientes datos para un relleno de esferas de aluminio 1060, sus 
 		\end{tabular}
 	\end{center}
 \end{table}
+
+\begin{table}[ht]
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{2}{ |c|}{Datos: Regenerador} &unidades\\ \hline
+			Diámetro & 12.7 & $mm$ \\ 
+			Longitud & 15 &$cm$ \\
+			Material  & cobre &  \\
+			Capacidad calorífica & 385 & $J\cdot kg^{-1} K^{-1}$ \\
+			Conductividad térmica& 385 & $W \cdot m^{-1} \cdot K^{-1}$ \\
+						
+			\hline
+			
+			
+		\end{tabular}
+	\end{center}
+\end{table}
 \newpage
-
-
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.3]{regen_esferas.png}
+	\caption{Esquema del regenerador relleno de esferas}
+\end{figure}
+\newpage
 \subsection{Calculo de parámetros para el modelado}
 \subsubsection{Propiedades del relleno del regenerador}
 En este apartado, se obtienen las características necesarias para conocer la porosidad del lecho, a partir del largo del regenerador,  las dimensiones del material de relleno y la velocidad del flujo de aire de la fuente. 
@@ -581,14 +628,14 @@ Por lo tanto, el coeficiente total de transferencia de calor es:
 \begin{equation*}
 	h_t = h_{lum} + h_r = 698.2040 + \num{1.5977e-5} + 0.3535 =  698.5575  W\cdot m^{-1} K^{-1} 
 \end{equation*}
+\newpage
 \subsection{Resumen de parámetros}
-Se obtuvieron los algunos parámetros para el caso de estudio que se esta abordando, están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes de las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
-\begin{table}[ht]
-	\caption{Coeficientes para el caso de estudio}
+Los parámetros obtenidos están basados según en el trabajo realizado por Kilkovsky\cite{Kilkovsky2020}, en la siguiente tabla se muestran todos los coeficientes necesarios para las ecuaciones (\ref{Gas}) y (\ref{Solido}): 
+\begin{table}[ht!]
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			\multicolumn{2}{ |c|}{Coeficiente}&cantidad & unidades \\ \hline
+			\multicolumn{2}{ |c|}{Datos del modelo: Constantes}&cantidad & unidades \\ \hline
 			$M_b$ & Masa del relleno (empaquetado) & 0.1882 & $kg$ \\
 			$C_{p,b}$&  Capacidad calorífica del relleno & 900 & $J \cdot kg^{-1} \cdot K^{-1} $ \\
 			$h_t$ & Coeficiente global de transferencia de calor&698.5575 & $W \cdot m^{-2} \cdot K^{-1}$ \\
@@ -603,39 +650,247 @@ Se obtuvieron los algunos parámetros para el caso de estudio que se esta aborda
 		\end{tabular}
 	\end{center}
 \end{table}
-\section{Resumen de actividades}
-Se ha estado revisando los parámetros que se involucran para el desarrollo del modelo, se obtuvieron usando de referencia los trabajos presentados en este documento. Se continua trabajando con el método de diferencias finitas para programarlas usando MATLAB. Se espera obtener como es el comportamiento del gas a lo largo del regenerador mediante gráficas, una vez solucionado se espera probar otras variantes del modelo que se pueda aproximar a la realidad cuando ya se tenga la planta experimental.
-\newline
-Las actividades para el siguiente semestre:
-\begin{itemize}
-	\item Continuar con el modelado del regenerador mediante diferencias finitas o usando MATLAB
-	\item El desarrollo del diseño de experimentos y pruebas en la planta experimental.
-	\item Comenzar con elaboración de un articulo reportando el modelo del regenerador que se esta proponiendo resolver mediante un método numérico o MATLAB.
-	\item Presentar los resultados en el predoctoral al final del sexto semestre.
-	\item El requisito de idioma ya se ha cubierto y se tramitara la liberación de la retribución social iniciando el sexto semestre.
-\end{itemize}   
+\section{Conclusión}
+En conclusión, la verificación de los parámetros de un modelo matemático es una etapa crítica que garantiza la precisión y validez del mismo. A través de esta verificación, se asegura que los parámetros empleados reflejan fielmente las condiciones reales del sistema estudiado, lo cual es esencial para obtener resultados confiables.
+
+De tal manera, la solución del modelo mediante métodos numéricos ya ha sido abordada con éxito, proporcionando una base sólida para la simulación y análisis del comportamiento del sistema. Sin embargo, este proceso no es definitivo, ya que se contempla una continua mejora y optimización de los métodos numéricos empleados. Esto permitirá una mayor precisión y eficiencia en la resolución del modelo. 
+
 
 \newpage
-
-\begin{landscape}
-	\section{Cronograma de actividades}
-	\begin{center}
-	\begin{figure}[ht!]
-		\includegraphics[scale=0.8]{crono_grama.pdf}
-	\end{figure}
-	\end{center}	
-\end{landscape}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Cronograma de actividades}
+\begin{figure}[ht!]
+	\includegraphics[scale=0.6]{crono_grama.pdf}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\textbf{\textbf{\bibliographystyle{ieeetr}
-\bibliography{referencias_5sem}}}
-
-%\begin{landscape}
-%	\appendix
-%	\section{Velocidad de salida al regenerador}
+\bibliographystyle{ieeetr}
+\bibliography{referencias_5sem}
+\newpage
+	\appendix
+	\section{Código del método numérico}
+	\label{Codigo1}
+	\begin{lstlisting}[language=Python]
+	import numpy as np
+	import matplotlib.pyplot as plt
 	
-%\end{landscape}
-
+	# Parámetros
+	Mb = 1.0  # Masa del sólido
+	Cp_b = 1.0  # Capacidad calorífica del sólido
+	mg = 1.0  # Masa del gas por unidad de longitud
+	Cp_g = 1.0  # Capacidad calorífica del gas
+	ht = 1  # Coeficiente de transferencia de calor
+	A = 1.0  # Área de intercambio
+	L = 1.0  # Longitud del dominio
+	N_x = 10  # Número de puntos espaciales
+	N_t = 100  # Número de puntos temporales
+	dx = L / (N_x - 1)  # Paso espacial
+	dt = 0.01  # Paso temporal
+	
+	# Inicialización de matrices
+	Tb = np.zeros((N_t, N_x))
+	Tg = np.zeros((N_t, N_x))
+	
+	# Condiciones iniciales
+	Tb[0, :] = 25  # Temperatura inicial del sólido
+	Tg[0, :] = 25  # Temperatura inicial del gas
+	
+	# Condición de frontera: temperatura constante de 200°C en el extremo izquierdo del gas
+	Tg[:, 0] = 200
+	
+	# Iteración temporal
+	for n in range(0, N_t-1):
+	for i in range(1, N_x-1):
+	# Ecuación (1)
+	Tb[n+1, i] = Tb[n, i] + dt * ht * A * (Tg[n, i] - Tb[n, i]) / (Mb * Cp_b)
+	
+	# Ecuación (2)
+	dTg_dx = (Tg[n, i+1] - Tg[n, i-1]) / (2 * dx)
+	dTg_dt = (ht * A * (Tb[n, i] - Tg[n, i]) - mg * Cp_g * L * dTg_dx) / (Mb * Cp_g)
+	Tg[n+1, i] = Tg[n, i] + dt * dTg_dt
+	
+	# Condición de frontera de Neumann en el extremo izquiero del solido
+	Tb[:, 0] = Tb[:, 1]
+	# Condición de frontera de Neumann en el extremo derecho del solido
+	Tb[n+1, -1] = Tb[n+1, -2]
+	# Condición de frontera de Neumann en el extremo derecho del gas
+	Tg[n+1, -1] = Tg[n+1, -2]
+	
+	# Graficar la solución
+	plt.figure(figsize=(12, 6))
+	
+	plt.subplot(1, 2, 1)
+	for i in range(N_x):
+	plt.plot(np.linspace(0, dt*N_t, N_t), Tb[:, i], label=f'Tb en x={i*dx:.2f}')
+	plt.xlabel('Tiempo')
+	plt.ylabel('Temperatura en el Solido')
+	plt.legend()
+	plt.subplot(1, 2, 2)
+	for i in range(N_x):
+	plt.plot(np.linspace(0, dt*N_t, N_t), Tg[:, i], '--', label=f'Tg en x={i*dx:.2f}')
+	plt.xlabel('Tiempo')
+	plt.ylabel('Temperatura del Gas')
+	plt.legend()
+	plt.savefig('solucion.png', dpi=300)
+	plt.show()
+\end{lstlisting}
+\newpage	
+\section{Ecuación homogénea de calor}
+	Ejemplo 6.1:
+	Considere una barra de hierro de longitud de 50 cm con un calor especifico de c = 0.437 J/g K, 
+	densidad rho= 7.88 g/cm3 y conductividad térmica  k = 0.836 W/cm K. Se asume que la barra esta aislada\cite{Gockenbach2010}.
+	\begin{lstlisting}[language=Python]
+		'''
+		Ecuacion homogenea de calor
+		Ejemplo 6.1 (Mark S. Gockenbach) p.214
+		Considere una barra de hierro de longitud de 50 cm con un calor especifico de c = 0.437 J/g K, 
+		densidad rho= 7.88 g/cm3 y conductividad termica  k = 0.836 W/cm K. Se asume que la barra esta aislada
+		'''
+		from scipy.integrate import solve_ivp
+		import numpy as np
+		import matplotlib.pyplot as plt
+		#Definir parametros
+		rho=7.88
+		c=0.437
+		k=0.836
+		#Definir las ecuciones diferenciales como funciones
+		def diff_xx(u,dx,k,c,rho):
+		f = (k/(rho*c))*(np.roll(u, 1)- 2*u +np.roll(u, -1))/dx
+		return f
+		
+		#Condiciones de frontera 
+		def cdf(u):
+		u[0] = 0 #Condicion frontera del lado izquierdo tipo de dirichlet
+		u[-1] = 0 #Condicion de frontera del lado derecho tipo dirichlet
+		return u
+		#Discretizacion del dominio
+		N = 20 # Numero de puntos discretos
+		L = 50 #Longitud de la barra de metal
+		dx = L/(N-1)
+		x = np.linspace(0,L,N) #Paso discreto de la longitud de la barra
+		
+		#Definicion de las condiciones iniciales
+		u0 = 5 - (1/5)*np.abs(x-25)
+		#Definicion de sistema completo de la ecuacion diferencial
+		def sistema(t,Y,dx,rho,c,k): #Los argumentos de la funcion deben ir en el mismo orden
+		N=len(Y)
+		u=Y
+		u[0] = 0 #Condicion frontera del lado izquierdo tipo de dirichlet
+		u[-1] = 0 #Condicion de frontera del lado derecho tipo dirichlet
+		du_dt = diff_xx(u,dx,k,c,rho)  
+		return du_dt
+		#Solucion de la ecuacion diferencial
+		t_span = (0,10)
+		sol = solve_ivp(sistema, t_span, u0, args=(dx,rho,c,k), method = 'RK45')
+		print(sol)
+		u_sol = sol.y # La solucion del sistema de ecuaciones diferenciales
+		plt.plot(x,u_sol[:N])
+		plt.xlabel('Longitud de la barra')
+		plt.ylabel('Temperatura')
+		plt.show()
+	\end{lstlisting}	
+	
+	\section{Modelo del sistema de López-Torres}
+	\label{Codigo2}
+		\begin{lstlisting}[language=Python]
+			#Datos del modelo : Constantes y variables
+			import numpy as np
+			T_0         =     24         #Temperatura inicial del lecho
+			T_e         =     100         #Temperatura de entrada del gas
+			rho_s       =    2600        #Densidad del material del lecho
+			rho_g       =    1.18        #Densidad del gas
+			epsilon     =    0.4         #Porosidad del lecho
+			K_sx        =    1.28        #Conductividad termica efectiva del solido
+			K_gx        =    0.02624     #Conductividad termica efectiva del gas
+			h           =    354.4538    #Coeficiente de transferencia de calor
+			a_p         =     6000       # Area superficial de las particulas por unidad de volumen
+			a_w         =      20        #Area superficial interior del lecho
+			u           =      0.6433    #Velocidad del flujo
+			Cp_s        =     920        #Calor especifico del lecho
+			Cp_g        =     1012       #Calor especifico del gas
+			U           =     1.9843     #coeficente de transferencia referido al Área del lecho, entre el interior del lecho y el exterior
+			# Coeficientes A, B, C, D, E
+			A = 1#K_sx/(rho_s*Cp_s)
+			B = 1#h*a_p/(rho_s*(1-epsilon)*Cp_s)
+			C = 1#K_gx/(rho_g*Cp_g)
+			D = 1#h*a_p/(rho_g*epsilon*Cp_g)
+			E = 1#U*a_w/(rho_g*epsilon*Cp_g)  
+			#Definicion de las funciones de las EDP
+			#-------------------------Ecuacion (1)-----------------------------
+			#------------------------------------------------------------------
+			def diff_Ts_xx(Ts,dx):
+			f = (np.roll(Ts,-1) -2*Ts + np.roll(Ts, 1) )/dx**2
+			return f
+			
+			#-------------------------------------------------------------------
+			#------------------------Ecuacion (2)-------------------------------
+			def diff_Tg_xx(Tg,dx):
+			f_1 = (np.roll(Tg,-1) -2*Tg + np.roll(Tg, 1) )/dx**2
+			return f_1
+			
+			def diff_Tg_x(Tg,dx):
+			f_2 = (np.roll(Tg, -1)-np.roll(Tg, 1))/(2*dx)
+			return f_2
+			
+			#--------------------------------------------------------------------
+			#--------------------Definicion de sistema completo------------------
+			def sistema (t, ci, A, B, C, D, E, dx):
+			N =len(ci)//2
+			Ts = ci[:N]
+			Tg = ci[N:]
+			T0 = np.ones(N)*25
+			#Se define el sistema de ecuaciones simultaneas
+			dTs_dxx = diff_Ts_xx(Ts,dx)
+			dTg_dx  = diff_Tg_x(Tg,dx)
+			dTg_dxx = diff_Tg_xx(Tg,dx)
+			dTs_dt  = A*dTs_dxx - B*(Ts - Tg)
+			dTg_dt  = C*dTg_dxx + D*(Ts - Tg) - u*dTg_dx + E*(T0 - Tg)
+			#Condiciones de frontera de Neumann
+			dTs_dt[0]=0 #CF-izquierda 
+			dTs_dt[-1]=0 #CF-derecha
+			#---------------------------------
+			dTg_dt[0]=0 #CF-izquierda
+			dTg_dt[-1]=0 #CF-derecha
+			#Condiciones de frontera de dirichlet
+			Tg[0] = 200
+			dT_dt = np.concatenate([dTs_dt,dTg_dt])
+			return dT_dt
+			#--------------------------------------------------------------------
+			#-------Discretizacion del dominio-------------------------
+			N = 20
+			L = 1
+			dx = L/(N-1)
+			x = np.linspace(0,L,N)
+			#Definicion de las condiciones iniciales
+			Ts_0 = np.ones(N)*T_0
+			Tg_0 = np.ones(N)*T_0
+			#Tg_0[0] = T_e
+			print(Tg_0)
+			ci   = np.concatenate([Ts_0,Tg_0]) #Vector de condiciones iniciales
+			#----------------Solucion del sistema de EDP
+			from scipy.integrate import solve_ivp
+			t_span = (0, 10)
+			t_eval = np.linspace(t_span[0], t_span[1], 100)
+			sol = solve_ivp(sistema, t_span, ci, args=(A, B, C, D, E, dx), t_eval=t_eval, method='RK45')
+			import matplotlib.pyplot as plt
+			#-------------------------Vectores de solucion----------------------
+			Ts_sol = sol.y[:N, :]
+			Tg_sol = sol.y[N:, :]
+			plt.plot(sol.t, Tg_sol.T)
+			plt.xlabel('Tiempo')
+			plt.ylabel('Temperatura del gas')
+			plt.show()
+			plt.plot(sol.t, Ts_sol.T)
+			plt.xlabel('Tiempo')
+			plt.ylabel('Temperatura del solido')
+			plt.show()
+		\end{lstlisting}
+		A continuación se presentan las graficas de solución, para el gas y para el solido después de 10 segundos.
+		\begin{figure}[ht!]
+			\includegraphics[scale=0.6]{temp_solido_lopez.png}
+			\caption{Resultados para el solido del modelo usando Python}
+		\end{figure}
+		\begin{figure}[ht!]
+			\includegraphics[scale=0.6]{temp_gas_lopez.png}
+			\caption{Resultados para el gas del modelo usando Python}
+		\end{figure}
 \end{document}
- 
